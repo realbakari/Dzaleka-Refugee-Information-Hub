@@ -56,7 +56,7 @@ export function InteractiveTimeline() {
         <CardTitle>Interactive Timeline</CardTitle>
         <CardDescription>Key events in Malawi's refugee history</CardDescription>
       </CardHeader>
-      <CardContent className="h-[600px]">
+      <CardContent className="h-[600px] p-0">
         <Chrono
           items={timelineItems}
           mode="VERTICAL_ALTERNATING"
@@ -69,6 +69,21 @@ export function InteractiveTimeline() {
             cardBgColor: 'hsl(var(--card))',
             cardForeColor: 'hsl(var(--card-foreground))',
             titleColor: 'hsl(var(--primary))',
+            titleColorActive: 'hsl(var(--primary))',
+          }}
+          fontSizes={{
+            cardSubtitle: '0.85rem',
+            cardText: '0.8rem',
+            cardTitle: '1rem',
+            title: '1rem',
+          }}
+          classNames={{
+            card: 'shadow-md rounded-lg',
+            cardMedia: 'rounded-t-lg',
+            cardSubTitle: 'text-muted-foreground',
+            cardText: 'text-foreground',
+            cardTitle: 'font-semibold text-primary',
+            title: 'font-semibold',
           }}
         />
       </CardContent>

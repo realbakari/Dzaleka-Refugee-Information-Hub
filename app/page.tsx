@@ -20,50 +20,38 @@ import { Analytics } from '@/components/analytics'
 import { useEffect } from 'react'
 import { ScrollToTop } from '@/components/scroll-to-top'
 import { ThemeToggle } from '@/components/theme-toggle'
+import { LegalFramework } from '@/components/legal-framework'
+import { DurableSolutions } from '@/components/durable-solutions'
+import { Stakeholders } from '@/components/stakeholders'
+import { EconomicImpact } from '@/components/economic-impact'
+import { EducationHealthcare } from '@/components/education-healthcare'
+import { SupportAdvocacy } from '@/components/support-advocacy'
+import dynamic from 'next/dynamic'
 
-interface SearchEventDetail {
-  searchTerm: string;
-}
-
-interface ShareEventDetail {
-  platform: string;
-}
-
-declare global {
-  interface WindowEventMap {
-    'search': CustomEvent<SearchEventDetail>;
-    'share': CustomEvent<ShareEventDetail>;
-  }
-}
+const DynamicChartRefugeePopulation = dynamic(() => import('@/components/chart-refugee-population').then(mod => mod.ChartRefugeePopulation), { ssr: false })
+const DynamicChartRegionalRefugeeData = dynamic(() => import('@/components/chart-regional-refugee-data').then(mod => mod.ChartRegionalRefugeeData), { ssr: false })
+const DynamicChartRefugeeIDPPopulation = dynamic(() => import('@/components/chart-refugee-idp-population').then(mod => mod.ChartRefugeeIDPPopulation), { ssr: false })
+const DynamicChartDzalekaNationalities = dynamic(() => import('@/components/chart-dzaleka-nationalities').then(mod => mod.ChartDzalekaNationalities), { ssr: false })
+const DynamicInteractiveTimeline = dynamic(() => import('@/components/interactive-timeline').then(mod => mod.InteractiveTimeline), { ssr: false })
 
 export default function Page() {
   useEffect(() => {
-    const trackSearch = (searchTerm: string) => {
-      // Analytics implementation
-      console.log('Search:', searchTerm);
-    };
+    const handleSearch = (searchTerm: string) => {
+      window.dispatchEvent(new CustomEvent('search', { detail: { searchTerm } }))
+    }
 
-    const trackShare = (platform: string) => {
-      // Analytics implementation
-      console.log('Share:', platform);
-    };
+    const handleShare = (platform: string) => {
+      window.dispatchEvent(new CustomEvent('share', { detail: { platform } }))
+    }
 
-    const handleSearch = (event: CustomEvent<SearchEventDetail>) => {
-      trackSearch(event.detail.searchTerm);
-    };
-
-    const handleShare = (event: CustomEvent<ShareEventDetail>) => {
-      trackShare(event.detail.platform);
-    };
-
-    window.addEventListener('search', handleSearch as EventListener);
-    window.addEventListener('share', handleShare as EventListener);
+    document.addEventListener('search', (e: CustomEvent) => handleSearch(e.detail.searchTerm))
+    document.addEventListener('share', (e: CustomEvent) => handleShare(e.detail.platform))
 
     return () => {
-      window.removeEventListener('search', handleSearch as EventListener);
-      window.removeEventListener('share', handleShare as EventListener);
-    };
-  }, []);
+      document.removeEventListener('search', (e: CustomEvent) => handleSearch(e.detail.searchTerm))
+      document.removeEventListener('share', (e: CustomEvent) => handleShare(e.detail.platform))
+    }
+  }, [])
 
   return (
     <div className="container mx-auto py-10 px-4 sm:px-6 lg:px-8">
@@ -84,20 +72,28 @@ export default function Page() {
           <PurposeAndScope />
         </div>
         <div className="lg:col-span-2">
-          <InteractiveTimeline />
+          <DynamicInteractiveTimeline />
         </div>
         <HistoricalBackground />
         <KeyTerminology />
-        <ChartRefugeePopulation />
-        <ChartRegionalRefugeeData />
-        <ChartRefugeeIDPPopulation />
-        <ChartDzalekaNationalities />
+        <LegalFramework />
+        <DurableSolutions />
+        <DynamicChartRefugeePopulation />
+        <DynamicChartRegionalRefugeeData />
+        <DynamicChartRefugeeIDPPopulation />
+        <DynamicChartDzalekaNationalities />
         <DzalekaInfo />
         <RecentEvents />
-        <DebunkingMyths />
         <CorruptionAndCriminality />
+        <Stakeholders />
+        <EconomicImpact />
+        <EducationHealthcare />
+        <DebunkingMyths />
         <div className="lg:col-span-2">
           <FAQSection />
+        </div>
+        <div className="lg:col-span-2">
+          <SupportAdvocacy />
         </div>
         <div className="lg:col-span-2">
           <Sources />

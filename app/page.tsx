@@ -21,24 +21,49 @@ import { useEffect } from 'react'
 import { ScrollToTop } from '@/components/scroll-to-top'
 import { ThemeToggle } from '@/components/theme-toggle'
 
+interface SearchEventDetail {
+  searchTerm: string;
+}
+
+interface ShareEventDetail {
+  platform: string;
+}
+
+declare global {
+  interface WindowEventMap {
+    'search': CustomEvent<SearchEventDetail>;
+    'share': CustomEvent<ShareEventDetail>;
+  }
+}
+
 export default function Page() {
   useEffect(() => {
-    const handleSearch = (searchTerm: string) => {
-      window.dispatchEvent(new CustomEvent('search', { detail: { searchTerm } }))
-    }
+    const trackSearch = (searchTerm: string) => {
+      // Analytics implementation
+      console.log('Search:', searchTerm);
+    };
 
-    const handleShare = (platform: string) => {
-      window.dispatchEvent(new CustomEvent('share', { detail: { platform } }))
-    }
+    const trackShare = (platform: string) => {
+      // Analytics implementation
+      console.log('Share:', platform);
+    };
 
-    document.addEventListener('search', (e: CustomEvent) => handleSearch(e.detail.searchTerm))
-    document.addEventListener('share', (e: CustomEvent) => handleShare(e.detail.platform))
+    const handleSearch = (event: CustomEvent<SearchEventDetail>) => {
+      trackSearch(event.detail.searchTerm);
+    };
+
+    const handleShare = (event: CustomEvent<ShareEventDetail>) => {
+      trackShare(event.detail.platform);
+    };
+
+    window.addEventListener('search', handleSearch as EventListener);
+    window.addEventListener('share', handleShare as EventListener);
 
     return () => {
-      document.removeEventListener('search', (e: CustomEvent) => handleSearch(e.detail.searchTerm))
-      document.removeEventListener('share', (e: CustomEvent) => handleShare(e.detail.platform))
-    }
-  }, [])
+      window.removeEventListener('search', handleSearch as EventListener);
+      window.removeEventListener('share', handleShare as EventListener);
+    };
+  }, []);
 
   return (
     <div className="container mx-auto py-10 px-4 sm:px-6 lg:px-8">

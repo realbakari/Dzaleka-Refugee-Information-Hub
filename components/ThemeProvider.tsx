@@ -1,39 +1,21 @@
-"use client";
+'use client'
 
-import { createContext, useState, useEffect, useMemo } from 'react';
-import { ThemeProvider as NextThemeProvider } from 'next-themes';
-import PropTypes from 'prop-types';
+import { ThemeProvider as NextThemesProvider } from "next-themes"
 
-interface Theme {
-  primaryColor: string;
-  secondaryColor: string;
-  textColor: string;
-  backgroundColor: string;
-}
-
-interface ThemeContextType {
-  theme: string;
-  setTheme: (theme: string) => void;
-  currentTheme: Theme;
-}
-
-interface ThemeProviderProps {
-  attribute?: string;
-  defaultTheme?: string;
-  enableSystem?: boolean;
-  disableTransitionOnChange?: boolean;
-  children: React.ReactNode;
-}
-
-export const ThemeProvider: React.FC<ThemeProviderProps> = ({
-  children,
-  ...props
-}) => {
+export function ThemeProvider({ 
+  children 
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <NextThemeProvider {...props}>
+    <NextThemesProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+    >
       {children}
-    </NextThemeProvider>
-  );
-};
+    </NextThemesProvider>
+  )
+}
 
 export default ThemeProvider;

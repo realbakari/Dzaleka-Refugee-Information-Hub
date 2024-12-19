@@ -1,43 +1,30 @@
-import type { Metadata } from "next";
-import { Geist, Azeret_Mono as Geist_Mono } from "next/font/google";
-import "../app/globals.css";
-import { ThemeProvider } from "@/components/ThemeProvider";
-import { Toaster } from "@/components/ui/toaster"
+import { Inter } from 'next/font/google'
+import { ThemeProvider } from "@/components/ThemeProvider"
+import './globals.css'
+import type { Metadata } from 'next'
 
-
-const geistSans = Geist({
-  subsets: ["latin"],
-});
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
-});
+const inter = Inter({ 
+  subsets: ['latin'],
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
-  title: "Dzaleka Refugee Information Hub",
-  description:
-    "Comprehensive information about refugees in Malawi and Dzaleka Refugee Camp",
-};
+  title: 'Dzaleka Refugee Information Hub',
+  description: 'Information resource for Dzaleka Refugee Camp',
+}
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
-      >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+      <body className={inter.className}>
+        <ThemeProvider>
           {children}
-          <Toaster />
         </ThemeProvider>
       </body>
     </html>
-  );
+  )
 }

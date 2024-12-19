@@ -75,7 +75,7 @@ export default function Page() {
       <Analytics />
       <ScrollToTop />
       <div className="flex flex-col items-center mb-8">
-        <h1 className="text-4xl font-bold mb-6 text-center">Dzaleka Refugee Information Hub</h1>
+        <h1 className="text-4xl font-bold mb-6 text-center">Search</h1>
         <SearchBar />
       </div>
       <div className="flex justify-end mb-6">

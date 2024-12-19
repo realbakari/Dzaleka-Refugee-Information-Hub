@@ -34,6 +34,23 @@ const DynamicChartRefugeeIDPPopulation = dynamic(() => import('@/components/char
 const DynamicChartDzalekaNationalities = dynamic(() => import('@/components/chart-dzaleka-nationalities').then(mod => mod.ChartDzalekaNationalities), { ssr: false })
 const DynamicInteractiveTimeline = dynamic(() => import('@/components/interactive-timeline').then(mod => mod.InteractiveTimeline), { ssr: false })
 
+export interface SearchEventDetail {
+  searchTerm: string;
+}
+
+export interface ShareEventDetail {
+  platform: string;
+}
+
+export interface CustomEvents {
+  'search': CustomEvent<SearchEventDetail>;
+  'share': CustomEvent<ShareEventDetail>;
+}
+
+declare global {
+  interface DocumentEventMap extends CustomEvents {}
+}
+
 export default function Page() {
   useEffect(() => {
     const handleSearch = (searchTerm: string) => {

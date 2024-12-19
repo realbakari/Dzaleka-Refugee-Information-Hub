@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Fuse from 'fuse.js'
+import Fuse, { FuseResult } from 'fuse.js'
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -9,8 +9,12 @@ import { Search, X, Loader2 } from 'lucide-react'
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useDebounce } from '@/hooks/use-debounce'
 
+interface SearchItem {
+  title: string
+  content: string
+}
 // Expanded searchable content
-const searchData = [
+const searchData: SearchItem[] = [
   { title: "Refugee Population", content: "Refugees represent 0.26% of the total population in Malawi." },
   { title: "Dzaleka Camp", content: "Dzaleka Refugee Camp hosts over 60,000 refugees as of 2024, far exceeding its original capacity of 10,000 to 12,000 people." },
   { title: "Refugee Act", content: "Malawi enacted the Refugee Act in 1989, establishing a legal framework for refugee protection." },
@@ -34,7 +38,7 @@ const fuse = new Fuse(searchData, {
 
 export function SearchBar() {
   const [searchTerm, setSearchTerm] = useState('')
-  const [searchResults, setSearchResults] = useState<Fuse.FuseResult<typeof searchData[0]>[]>([])
+  const [searchResults, setSearchResults] = useState<FuseResult<SearchItem>[]>([])
   const [isSearching, setIsSearching] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const debouncedSearchTerm = useDebounce(searchTerm, 300)

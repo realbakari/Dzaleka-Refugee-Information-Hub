@@ -2,37 +2,52 @@
 
 import { useEffect } from 'react'
 
+// Define custom event types
+interface SearchEventDetail {
+  searchTerm: string
+}
+
+interface ShareEventDetail {
+  platform: string
+}
+
+declare global {
+  interface WindowEventMap {
+    'search': CustomEvent<SearchEventDetail>
+    'share': CustomEvent<ShareEventDetail>
+  }
+}
+
 export function Analytics() {
   useEffect(() => {
     const trackPageView = () => {
-      // This is a placeholder for actual analytics tracking
       console.log('Page view:', window.location.pathname)
     }
 
     const trackSearch = (searchTerm: string) => {
-      // This is a placeholder for actual search tracking
       console.log('Search term:', searchTerm)
     }
 
     const trackShare = (platform: string) => {
-      // This is a placeholder for actual share tracking
       console.log('Shared on:', platform)
     }
 
     // Track initial page view
     trackPageView()
 
-    // Set up event listeners for search and share
-    window.addEventListener('search', (e: CustomEvent) => trackSearch(e.detail.searchTerm))
-    window.addEventListener('share', (e: CustomEvent) => trackShare(e.detail.platform))
+    // Set up event listeners with correct typing
+    const handleSearch = (e: CustomEvent<SearchEventDetail>) => trackSearch(e.detail.searchTerm)
+    const handleShare = (e: CustomEvent<ShareEventDetail>) => trackShare(e.detail.platform)
 
-    // Clean up event listeners
+    window.addEventListener('search', handleSearch as EventListener)
+    window.addEventListener('share', handleShare as EventListener)
+
+    // Clean up
     return () => {
-      window.removeEventListener('search', (e: CustomEvent) => trackSearch(e.detail.searchTerm))
-      window.removeEventListener('share', (e: CustomEvent) => trackShare(e.detail.platform))
+      window.removeEventListener('search', handleSearch as EventListener)
+      window.removeEventListener('share', handleShare as EventListener)
     }
   }, [])
 
   return null
 }
-
